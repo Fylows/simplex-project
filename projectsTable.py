@@ -24,5 +24,3 @@ def getProject(projectName:str) -> list:
   row = ProjectsList.loc[ProjectsList["ProjectNames"] == projectName]
   # removes the column name project names, and gets the integer values of the row then makes a list from them
   return row.drop(columns=["ProjectNames"]).iloc[0].tolist()
-
-

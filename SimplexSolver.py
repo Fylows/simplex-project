@@ -1,6 +1,7 @@
-from pickle import FALSE, TRUE
-from typing import final
 import numpy as np
+import pandas as pd
+from projectsTable import getProject
+import tableauMaker
 
 # Teableau is an numpy array
 # is max is a boolean
@@ -22,7 +23,7 @@ def simplex(tableau, isMax):
         rhs = tableau[:-1, -1]
         valid = denom > 0
         if (not np.any(valid)): # if all values are non positive
-            raise ValueError("Unbounded solution")
+            return "Unbounded Error"
         
         testRatios = np.full(denom.shape, np.inf, dtype=float) # make np.arr thats full of inf thats the same size as denom
         testRatios[valid] = rhs[valid] / denom[valid] # for all valid numbers, do rhs/denom
@@ -50,7 +51,7 @@ def simplex(tableau, isMax):
 def basicSol(tableau, isMax, nrow, ncol):
     # Extract basic variable values from final tableau
     # Identify columns that are unit vectors and take RHS at the 1's row
-    if isMax == FALSE:
+    if isMax == False:
         # For minimization last row entries
         return [tableau[nrow-1, :ncol-1], tableau[nrow-1, ncol-1]]
 
@@ -67,3 +68,37 @@ def basicSol(tableau, isMax, nrow, ncol):
             baSo.append(0)
     return baSo
 
+def expensesSummary(projects, basicSolution):
+    nUnknowns = len(projects)
+    # Initialize DataFrame with proper columns
+    newDf = pd.DataFrame(columns=['Project', 'Quantity', 'Total_Cost'])
+    
+    # Extract x-values (quantities) from basic solution
+    # For minimization: basicSolution = [slack_vars..., x_vars..., Z]
+    x_vals = basicSolution[nUnknowns:-1]  # Get the x variables (skip slack vars, exclude Z)
+    xN = len(x_vals)
+    for i in range(xN):
+        if x_vals[i] != 0:  # Only include projects with non-zero quantities
+            project_name = projects[i]
+            quantity = x_vals[i]
+            project_data = getProject(project_name)
+            total_cost = project_data[0] * quantity  
+            
+            # Create new row as DataFrame
+            new_row = pd.DataFrame({
+                'Project': [project_name],
+                'Quantity': [quantity],
+                'Total_Cost': [total_cost]
+            })
+            # Concatenate properly
+            newDf = pd.concat([newDf, new_row], ignore_index=True)
+    
+    return newDf
+
+# projs = ['Boiler Retrofit', 'Traffic Signal/Flow Upgrade', 'Low-Emission Stove Program', 'Industrial Scrubbers', 'Reforestation (acre-package)', 'Agricultural Methane Reduction', 'Clean Cookstove & Fuel Switching (community scale)', 'Biochar for soils (per project unit)', 'Industrial VOC', 'Wetlands restoration', 'Household LPG conversion program', 'Industrial process change', 'Behavioral demand-reduction program']
+# pop = tableauMaker.populateProjects(projs)
+# ans = tableauMaker.systemsLinearConstructor(pop, [1000, 35, 25, 20, 60, 45, 80, 12, 6, 10])
+# ans = tableauMaker.makeTableau(ans, False)
+# ans = simplex(ans, False)
+# print(ans["Z"])
+# np.savetxt('filename.csv', ans["Basic Solution"], delimiter='\t', fmt = "%.6f")

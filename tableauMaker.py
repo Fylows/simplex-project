@@ -5,18 +5,13 @@ FOR USE OF THE SIMPLEX METHOD
 
 
 import projectsTable
-import SimplexSolver
-
 from asyncio import constants
-from pickle import FALSE, NONE, TRUE
-from select import poll
-import pandas as pd
 import numpy as np
 
 # take in a matrix FXNS
 # and boolean isMax
 def makeTableau(fxns, isMax):
-    if (isMax == FALSE):
+    if (isMax == False):
         fxns = fxns.T
 
     # gets row and col of functions matrix
@@ -65,24 +60,10 @@ def systemsLinearConstructor(projectsIncluded, pollutantsToReduce):
     return projs
 
 
-
-# TEST CASE
-projs = ["Boiler Retrofit", "Traffic Signal/Flow Upgrade", "Low-Emission Stove Program", "Industrial Scrubbers", "Reforestation (acre-package)","Agricultural Methane Reduction", "Clean Cookstove & Fuel Switching (community scale)", "Biochar for soils (per project unit)", "Industrial VOC", "Wetlands restoration", "Household LPG conversion program", "Industrial process change", "Behavioral demand-reduction program"]
-projs2 = ["Large Solar Park","Small Solar Installations","Wind Farm", "Gas-to-renewables conversion","Boiler Retrofit","Catalytic Converters for Buses"]
-projsInclude = np.zeros((len(projs),11))
-
-for i in range(len(projs)):
-    projsInclude[i] = projectsTable.getProject(projs[i])
-
-# convert projects and pollutants into a systems of linear equation
-ans = systemsLinearConstructor(projsInclude, [1000,35,25,20,60,45,80,12,6,10])
-np.savetxt("/Users/yel/Desktop/Coding/CMSC_150_proj/PythonVer/InitialSystems.txt", ans, delimiter="\t", fmt="%.6g")
-
-# make it into a tableau
-ans = makeTableau(ans, FALSE)
-np.savetxt("/Users/yel/Desktop/Coding/CMSC_150_proj/PythonVer/InitialTableau.txt", ans, delimiter=" ", fmt="%.6g")
-
-
-ans = SimplexSolver.simplex(ans,FALSE)
-with open("/Users/yel/Desktop/Coding/CMSC_150_proj/PythonVer/output.txt", "w") as f:
-    f.write(f"{ans}:\n")
+def populateProjects(projs):
+    projsInclude = []
+    nProjs = len(projs)
+    for i in range(nProjs):
+        projsInclude.append(projectsTable.getProject(projs[i]))
+    projsInclude = np.array(projsInclude)
+    return projsInclude
