@@ -76,7 +76,7 @@ This problem was modeled and solved using **Linear Programming** via the **Simpl
 **Course:** Numerical and Symbolic Computation  
 **Project Title:** City Pollution Reduction Plan  
 **Method Used:** Simplex Method  
-**Student:** *[Your Name]*
+**Student Numer :** 2024-02076
 
 ---
 
@@ -95,11 +95,11 @@ This problem was modeled and solved using **Linear Programming** via the **Simpl
 
 
 ## 📊 Results
-# The model provides:
-# The minimum total cost required to meet all reduction targets.
-# The optimal allocation of mitigation options.
-# Insights into trade-offs between pollutant reduction and expenditure.
+**The model provides:**
+1. The minimum total cost required to meet all reduction targets.
+2. The optimal allocation of mitigation options.
+3. Insights into trade-offs between pollutant reduction and expenditure.
 
 
 
-🏆 Developed as part of my Numerical and Symbolic Computation Course.
+## 🏆 Developed as part of my Numerical and Symbolic Computation Course.
