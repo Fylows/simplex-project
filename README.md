@@ -84,8 +84,8 @@ This problem was modeled and solved using **Linear Programming** via the **Simpl
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/greenvale-pollution-plan.git
-   cd greenvale-pollution-plan
+   git clone https://github.com/Fylows/simplex-project
+   cd simplex-project
 2. install dependencies
    ```bash
    pip install -r requirements.txt
