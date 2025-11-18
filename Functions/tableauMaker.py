@@ -4,8 +4,7 @@ FOR USE OF THE SIMPLEX METHOD
 """
 
 
-import projectsTable
-from asyncio import constants
+import Functions.projectsTable as projectsTable
 import numpy as np
 
 # take in a matrix FXNS
