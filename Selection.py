@@ -47,15 +47,28 @@ def show():
         st.header("📋 Project Selection")
         st.markdown("Select the projects you want to analyze:")
         
-        # Get project names from the dataframe
+        # Initialize session state once
+        if "selected_projects" not in st.session_state:
+            st.session_state.selected_projects = []
+
         project_names = ProjectsList["ProjectNames"].tolist()
-        
-        # Create checklist
+
+        # Checkbox
+        select_all = st.checkbox("Select All")
+
+        # If select all checked → update session state
+        if select_all:
+            st.session_state.selected_projects = project_names
+        # If unchecked and previously all were selected → clear list
+        elif set(st.session_state.selected_projects) == set(project_names):
+            st.session_state.selected_projects = []
+
+        # Selection box
         selected_projects = st.multiselect(
             "Choose Projects:",
             options=project_names,
-            default=[],
-            help="Select one or more projects to view their details"
+            default=st.session_state.selected_projects,
+            key="selected_projects"
         )
         
         # Display selected projects info
@@ -101,25 +114,6 @@ def show():
     # USE COL1's DATA
     # Right column - Emissions Bar Graph
     with col2:
-        # st.header("📊 Emissions Reduction Overview")
-        # st.markdown("Bar graph showing potential emissions reductions:")
-        
-        # # Emissions data from .env file
-        # emissions_data = {
-        #     "Pollutant": POLLUTANT_NAMES,
-        #     "Reduction (tons)": POLLUTANTS_MIN
-        # }
-        
-        # # Create DataFrame
-        # emissions_df = pd.DataFrame()
-        
-        # # Create bar chart using Streamlit
-        # # st.bar_chart(emissions_df.set_index("Pollutant"))
-        
-        # # Add some additional info
-        # st.info("💡 This chart shows the potential emissions reductions achievable through various environmental projects.")
-        
-        # Second graph - Project-based emissions reductions
         st.subheader("📈 Selected Projects Emissions Impact")
         
         # Calculate remaining emissions after project reductions
