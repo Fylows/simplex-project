@@ -44,6 +44,7 @@ def systemsLinearConstructor(projectsIncluded, pollutantsToReduce):
     # and convert it into -x >= -20 so all constraints are >=
     constraints = np.identity(nUnknowns, dtype=int)
     constraints = -constraints
+   # maxProjs = np.zeros((nUnknowns,nUnknowns))
     maxProjs = np.array([-20] * nUnknowns)[:,None]
     constraints = np.hstack([constraints,maxProjs])
 

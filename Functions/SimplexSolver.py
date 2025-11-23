@@ -77,8 +77,7 @@ def expensesSummary(projects, basicSolution):
     
     newDf = pd.DataFrame(columns=['Project', 'Quantity', 'Total_Cost'])
     j = 0
-    # 23 where the project count starts
-    for i in range(23,len(basicSolution[0])-1):
+    for i in range((10+len(projects)),len(basicSolution[0])-1):
         project_name = projects[j]
         j+=1
         project_data = getProject(project_name)
