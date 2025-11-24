@@ -26,8 +26,6 @@ if _persisted:
     if st.session_state.get("S") in (None,):
         st.session_state["S"] = _persisted.get("S", st.session_state.get("S"))
 
-selected_projects = st.session_state.get("selected_projects", [])
-
 POLLUTANTS_MIN = [1000, 35, 25, 20, 60, 45, 80, 12, 6, 10]
 EMPTY_POLLUTANTS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 POLLUTANT_NAMES = ["CO2", "NO", "SO2", "PM2.5", "CH4", "VOC", "CO", "NH3", "BC", "N2O"]
