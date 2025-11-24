@@ -7,7 +7,13 @@ from Functions.projectsTable import ProjectsList
 import Functions.tableauMaker as tableauMaker
 import Functions.SimplexSolver as SimplexSolver
 
-import streamlit as st
+# Initialize session state keys early so values persist across pages/reruns
+if "selected_projects" not in st.session_state:
+    st.session_state["selected_projects"] = []
+if "select_all" not in st.session_state:
+    st.session_state["select_all"] = False
+if "S" not in st.session_state:
+    st.session_state["S"] = None
 
 selected_projects = st.session_state.get("selected_projects", [])
 
@@ -40,12 +46,12 @@ with col1:
 
     project_names = ProjectsList["ProjectNames"].tolist()
 
-    # If select all checked → update session state
-    if st.checkbox("Select All"):
-        st.session_state.selected_projects = project_names
-    # If unchecked and previously all were selected → clear list
-    elif set(st.session_state.selected_projects) == set(project_names):
-        st.session_state.selected_projects = []
+    # If select all checked → update session state. Use a key so checkbox state persists.
+    select_all = st.checkbox("Select All", key="select_all")
+    # When user checks 'Select All' set all projects; when unchecked, do not automatically
+    # clear the selection (avoid losing state on rerun). Let the user change multiselect.
+    if select_all:
+        st.session_state["selected_projects"] = project_names
 
     # Selection box
     selected_projects = st.multiselect(
@@ -77,10 +83,11 @@ with col1:
         selected_projects_names = selected_df['ProjectNames'].tolist()
 
         selected_projects_matrix = tableauMaker.populateProjects(selected_projects_names)
-        systems =  tableauMaker.systemsLinearConstructor(selected_projects_matrix, POLLUTANTS_MIN)
+        systems = tableauMaker.systemsLinearConstructor(selected_projects_matrix, POLLUTANTS_MIN)
         systems = tableauMaker.makeTableau(systems, False)
         solved = SimplexSolver.simplex(systems, False)
 
+        # persist solved result in session state so other pages/components can read it
         st.session_state["S"] = solved
 
         if solved == "Unbounded Error":
@@ -107,9 +114,12 @@ with col2:
     pollutant_columns = POLLUTANT_NAMES
     initial_values = POLLUTANTS_MIN
     empty_arr = EMPTY_POLLUTANTS
-    if selected_projects and solved != "Unbounded Error":
-        project_reductions = solved["Basic Solution"][0][:10]
-        print(project_reductions)
+
+    # Read solved result from session state to survive reruns/pages
+    solved_state = st.session_state.get("S", None)
+
+    if selected_projects and solved_state and solved_state != "Unbounded Error":
+        project_reductions = solved_state["Basic Solution"][0][:10]
         remaining_emissions = [max(0, initial - reduction) for initial, reduction in zip(initial_values, project_reductions)]
     else:
         project_reductions = empty_arr
