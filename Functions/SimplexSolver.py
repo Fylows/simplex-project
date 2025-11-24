@@ -94,6 +94,7 @@ def expensesSummary(projects, basicSolution):
         newDf = pd.concat([newDf, new_row], ignore_index=True)
     return newDf
 
+
 # projs = ['Boiler Retrofit', 'Traffic Signal/Flow Upgrade', 'Low-Emission Stove Program', 'Industrial Scrubbers', 'Reforestation (acre-package)', 'Agricultural Methane Reduction', 'Clean Cookstove & Fuel Switching (community scale)', 'Biochar for soils (per project unit)', 'Industrial VOC', 'Wetlands restoration', 'Household LPG conversion program', 'Industrial process change', 'Behavioral demand-reduction program']
 # pop = tableauMaker.populateProjects(projs)
 # ans = tableauMaker.systemsLinearConstructor(pop, [1000, 35, 25, 20, 60, 45, 80, 12, 6, 10])
