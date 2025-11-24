@@ -31,7 +31,7 @@
     "Industrial process change",
     "Behavioral demand-reduction program"
   ],
-  "select_all": false,
+  "select_all": true,
   "S": {
     "Final tableau": [
       [

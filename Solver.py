@@ -8,6 +8,20 @@ import Functions.tableauMaker as tableauMaker
 import Functions.SimplexSolver as SimplexSolver
 import Functions.persistence as persistence
 
+# Load persisted state (best-effort). Attempt to apply persisted values before setting defaults.
+_persisted = persistence.load_state()
+if _persisted:
+    # Only apply persisted values when the session doesn't already have a meaningful value.
+    if ("selected_projects" not in st.session_state) or st.session_state.get("selected_projects") in (None, [], {}):
+        if "selected_projects" in _persisted:
+            st.session_state["selected_projects"] = _persisted.get("selected_projects")
+    if ("select_all" not in st.session_state) or st.session_state.get("select_all") is None:
+        if "select_all" in _persisted:
+            st.session_state["select_all"] = _persisted.get("select_all")
+    if ("S" not in st.session_state) or st.session_state.get("S") is None:
+        if "S" in _persisted:
+            st.session_state["S"] = _persisted.get("S")
+
 # Initialize session state keys early so values persist across pages/reruns
 if "selected_projects" not in st.session_state:
     st.session_state["selected_projects"] = []
@@ -15,16 +29,6 @@ if "select_all" not in st.session_state:
     st.session_state["select_all"] = False
 if "S" not in st.session_state:
     st.session_state["S"] = None
-
-# Load persisted state (best-effort). Only overwrite defaults.
-_persisted = persistence.load_state()
-if _persisted:
-    if st.session_state.get("selected_projects") in (None, [], {}):
-        st.session_state["selected_projects"] = _persisted.get("selected_projects", st.session_state.get("selected_projects"))
-    if st.session_state.get("select_all") in (None, False):
-        st.session_state["select_all"] = _persisted.get("select_all", st.session_state.get("select_all"))
-    if st.session_state.get("S") in (None,):
-        st.session_state["S"] = _persisted.get("S", st.session_state.get("S"))
 
 POLLUTANTS_MIN = [1000, 35, 25, 20, 60, 45, 80, 12, 6, 10]
 EMPTY_POLLUTANTS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -60,17 +64,19 @@ with col1:
     project_names = ProjectsList["ProjectNames"].tolist()
 
     # If select all checked → update session state. Use a key so checkbox state persists.
-    select_all = st.checkbox("Select All", key="select_all")
-    # When user checks 'Select All' set all projects; when unchecked, do not automatically
-    # clear the selection (avoid losing state on rerun). Let the user change multiselect.
-    if select_all:
-        st.session_state["selected_projects"] = project_names
+    # Use an on_change handler so toggling the checkbox will set or clear the multiselect.
+    def _on_toggle_select_all():
+        if st.session_state.get("select_all"):
+            st.session_state["selected_projects"] = project_names.copy()
+        else:
+            st.session_state["selected_projects"] = []
+            
+    select_all = st.checkbox("Select All", key="select_all", on_change=_on_toggle_select_all)
 
     # Selection box
     selected_projects = st.multiselect(
         "Choose Projects:",
         options=project_names,
-        default=st.session_state.get("selected_projects", []),
         key="selected_projects"
     )
 
