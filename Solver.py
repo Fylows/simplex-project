@@ -6,6 +6,7 @@ import numpy as np
 from Functions.projectsTable import ProjectsList
 import Functions.tableauMaker as tableauMaker
 import Functions.SimplexSolver as SimplexSolver
+import Functions.persistence as persistence
 
 # Initialize session state keys early so values persist across pages/reruns
 if "selected_projects" not in st.session_state:
@@ -14,6 +15,16 @@ if "select_all" not in st.session_state:
     st.session_state["select_all"] = False
 if "S" not in st.session_state:
     st.session_state["S"] = None
+
+# Load persisted state (best-effort). Only overwrite defaults.
+_persisted = persistence.load_state()
+if _persisted:
+    if st.session_state.get("selected_projects") in (None, [], {}):
+        st.session_state["selected_projects"] = _persisted.get("selected_projects", st.session_state.get("selected_projects"))
+    if st.session_state.get("select_all") in (None, False):
+        st.session_state["select_all"] = _persisted.get("select_all", st.session_state.get("select_all"))
+    if st.session_state.get("S") in (None,):
+        st.session_state["S"] = _persisted.get("S", st.session_state.get("S"))
 
 selected_projects = st.session_state.get("selected_projects", [])
 
@@ -31,6 +42,10 @@ st.set_page_config(
 # Main title
 st.title("🌱 Environmental Projects Dashboard")
 st.markdown("---")
+
+# # Debug: show session state to help trace why selections reset
+# with st.expander("Debug: session_state"):
+#     st.json({k: (v if not isinstance(v, (list, dict)) else v) for k, v in st.session_state.items()})
 
 # Create two columns for layout
 col1, col2 = st.columns([1, 1])
@@ -60,6 +75,16 @@ with col1:
         default=st.session_state.get("selected_projects", []),
         key="selected_projects"
     )
+
+    # persist selection immediately (best-effort)
+    try:
+        persistence.save_state({
+            "selected_projects": st.session_state.get("selected_projects", []),
+            "select_all": st.session_state.get("select_all", False),
+            "S": st.session_state.get("S", None)
+        })
+    except Exception:
+        pass
     
     # Display selected projects info
     if selected_projects:
@@ -89,6 +114,16 @@ with col1:
 
         # persist solved result in session state so other pages/components can read it
         st.session_state["S"] = solved
+
+        # persist solved result to disk (best-effort)
+        try:
+            persistence.save_state({
+                "selected_projects": st.session_state.get("selected_projects", []),
+                "select_all": st.session_state.get("select_all", False),
+                "S": st.session_state.get("S", None)
+            })
+        except Exception:
+            pass
 
         if solved == "Unbounded Error":
             st.error("Project is infeasible - no optimal solution exists")
