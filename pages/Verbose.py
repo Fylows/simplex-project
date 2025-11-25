@@ -1,11 +1,23 @@
-from typing import Any
-
-
+import streamlit as st
+from Functions import persistence
 import streamlit as st
 import pandas as pd
 import Functions.persistence as persistence
-
 st.title("Verbose Output")
+
+# Load persisted state every time this page is opened so the view reflects
+# the saved values (for example when the user cleared selection in the
+# Selection page and that change was persisted to disk).
+try:
+    _persisted = persistence.load_state()
+    if _persisted:
+        # apply persisted values so `st.session_state` reflects latest persisted state
+        for k in ("selected_projects", "select_all", "S"):
+            if k in _persisted:
+                st.session_state[k] = _persisted.get(k)
+except Exception:
+    # best-effort; don't crash the page if persistence fails
+    pass
 
 
 # Load persisted state (best-effort)
