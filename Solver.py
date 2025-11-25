@@ -241,7 +241,7 @@ with col2:
     st.plotly_chart(fig3, use_container_width=True)
     
     # Add summary of project impact
-    if selected_projects:
+    if solved != "Unbounded Error":
         total_co2_reduction = selected_df['CO2'].sum()
         total_cost = selected_df['Cost'].sum()
         
