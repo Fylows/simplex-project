@@ -12,7 +12,10 @@ import Functions.persistence as persistence
 _persisted = persistence.load_state()
 if _persisted:
     # Only apply persisted values when the session doesn't already have a meaningful value.
-    if ("selected_projects" not in st.session_state) or st.session_state.get("selected_projects") in (None, [], {}):
+    # Important: do NOT treat an empty list as "no meaningful value" here —
+    # the user may intentionally clear the selection. Only apply persisted
+    # `selected_projects` when the key is missing or explicitly None.
+    if ("selected_projects" not in st.session_state) or st.session_state.get("selected_projects") is None:
         if "selected_projects" in _persisted:
             st.session_state["selected_projects"] = _persisted.get("selected_projects")
     if ("select_all" not in st.session_state) or st.session_state.get("select_all") is None:
@@ -63,22 +66,41 @@ with col1:
 
     project_names = ProjectsList["ProjectNames"].tolist()
 
-    # If select all checked → update session state. Use a key so checkbox state persists.
-    # Use an on_change handler so toggling the checkbox will set or clear the multiselect.
-    def _on_toggle_select_all():
-        if st.session_state.get("select_all"):
-            st.session_state["selected_projects"] = project_names.copy()
-        else:
-            st.session_state["selected_projects"] = []
+    # Select All button (explicit action) and persistence when selection changes.
+    def _on_projects_change():
+        # This callback runs after `selected_projects` has been updated in session_state.
+        sel = st.session_state.get("selected_projects", [])
+        # Track whether everything is selected
+        st.session_state["select_all"] = (set(sel) == set(project_names))
+        try:
+            persistence.save_state({
+                "selected_projects": sel,
+                "select_all": st.session_state.get("select_all", False),
+                "S": st.session_state.get("S", None)
+            })
+        except Exception:
+            pass
 
-    select_all = st.checkbox("Select All", key="select_all", on_change=_on_toggle_select_all)
+    # Button to select all projects explicitly
+    if st.button("Select All"):
+        st.session_state["selected_projects"] = project_names.copy()
+        st.session_state["select_all"] = True
+        try:
+            persistence.save_state({
+                "selected_projects": st.session_state.get("selected_projects", []),
+                "select_all": st.session_state.get("select_all", False),
+                "S": st.session_state.get("S", None)
+            })
+        except Exception:
+            pass
 
-    # Selection box
+    # Selection box with an on_change callback so we persist whenever the user changes it
     selected_projects = st.multiselect(
         "Choose Projects:",
         options=project_names,
+        default=st.session_state.get("selected_projects", []),
         key="selected_projects",
-        default = st.session_state.get("selected_projects", []),
+        on_change=_on_projects_change,
     )
 
     # persist selection immediately (best-effort)
