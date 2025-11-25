@@ -9,7 +9,11 @@ def simplex(tableau, isMax):
     # work in float to avoid integer division and allow infinities
     tableau = tableau.astype(float, copy=True)
     nrow, ncol = tableau.shape
+    iter = 0
     verbose = []
+    # ADD INITIAL TABLEAU
+    verbose.append([iter, tableau.copy(), basicSol(tableau, isMax, nrow, ncol).copy()])
+
     while (1):
         objRow = tableau[-1, :]
 
@@ -41,7 +45,8 @@ def simplex(tableau, isMax):
                 tableau[i, :] = tableau[i, :] - (tableau[pr, :] * tableau[i, pc])
 
         # ADD TABLEAU AND BASIC SOLUTION EVERY ITERATION
-        verbose.append([tableau.copy(), basicSol(tableau, isMax, nrow, ncol).copy()])
+        iter += 1
+        verbose.append([iter, tableau.copy(), basicSol(tableau, isMax, nrow, ncol).copy()])
     
     finalTableau = tableau
     basicSolution = basicSol(finalTableau, isMax, nrow, ncol)

@@ -70,14 +70,15 @@ with col1:
             st.session_state["selected_projects"] = project_names.copy()
         else:
             st.session_state["selected_projects"] = []
-            
+
     select_all = st.checkbox("Select All", key="select_all", on_change=_on_toggle_select_all)
 
     # Selection box
     selected_projects = st.multiselect(
         "Choose Projects:",
         options=project_names,
-        key="selected_projects"
+        key="selected_projects",
+        default = st.session_state.get("selected_projects", []),
     )
 
     # persist selection immediately (best-effort)
