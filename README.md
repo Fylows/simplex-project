@@ -91,7 +91,7 @@ This problem was modeled and solved using **Linear Programming** via the **Simpl
    pip install -r requirements.txt
 3. Run the streamlitapp
    ```bash
-   streamlit run app.py
+   streamlit run Solver.py
 
 
 ## 📊 Results
