@@ -67,5 +67,5 @@ else:
                 st.dataframe(pd.DataFrame(tableau, columns = final_columns +  ["Z"] + ["Constants"]))
 
                 st.markdown("### Basic Solution")
-                st.dataframe(pd.DataFrame(basic_solution[0][:-1], columns = ["Variables"], index = final_columns))
+                st.dataframe(pd.DataFrame(basic_solution[0][:-1], index = final_columns))
                 st.write(f"Z: {basic_solution[1]}")
