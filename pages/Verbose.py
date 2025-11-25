@@ -64,8 +64,8 @@ else:
                 st.subheader(f"Iteration {iteration}")
 
                 st.markdown("### Tableau")
-                st.dataframe(pd.DataFrame(tableau, columns = final_columns +  ["Z", "Constants"]))
+                st.dataframe(pd.DataFrame(tableau, columns = final_columns +  ["Z"] + ["Constants"]))
 
                 st.markdown("### Basic Solution")
-                st.dataframe(pd.DataFrame(basic_solution[0][:-1], columns = ["Variables","Values"], index = final_columns))
+                st.dataframe(pd.DataFrame(basic_solution[0][:-1], columns = ["Variables"], index = final_columns))
                 st.write(f"Z: {basic_solution[1]}")
