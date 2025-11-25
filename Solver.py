@@ -18,9 +18,6 @@ if _persisted:
     if ("selected_projects" not in st.session_state) or st.session_state.get("selected_projects") is None:
         if "selected_projects" in _persisted:
             st.session_state["selected_projects"] = _persisted.get("selected_projects")
-    if ("select_all" not in st.session_state) or st.session_state.get("select_all") is None:
-        if "select_all" in _persisted:
-            st.session_state["select_all"] = _persisted.get("select_all")
     if ("S" not in st.session_state) or st.session_state.get("S") is None:
         if "S" in _persisted:
             st.session_state["S"] = _persisted.get("S")
@@ -28,8 +25,6 @@ if _persisted:
 # Initialize session state keys early so values persist across pages/reruns
 if "selected_projects" not in st.session_state:
     st.session_state["selected_projects"] = []
-if "select_all" not in st.session_state:
-    st.session_state["select_all"] = False
 if "S" not in st.session_state:
     st.session_state["S"] = None
 
@@ -48,9 +43,6 @@ st.set_page_config(
 st.title("🌱 Environmental Projects Dashboard")
 st.markdown("---")
 
-# # Debug: show session state to help trace why selections reset
-# with st.expander("Debug: session_state"):
-#     st.json({k: (v if not isinstance(v, (list, dict)) else v) for k, v in st.session_state.items()})
 
 # Create two columns for layout
 col1, col2 = st.columns([1, 1])
@@ -70,12 +62,10 @@ with col1:
     def _on_projects_change():
         # This callback runs after `selected_projects` has been updated in session_state.
         sel = st.session_state.get("selected_projects", [])
-        # Track whether everything is selected
-        st.session_state["select_all"] = (set(sel) == set(project_names))
+        
         try:
             persistence.save_state({
                 "selected_projects": sel,
-                "select_all": st.session_state.get("select_all", False),
                 "S": st.session_state.get("S", None)
             })
         except Exception:
@@ -84,11 +74,9 @@ with col1:
     # Button to select all projects explicitly
     if st.button("Select All"):
         st.session_state["selected_projects"] = project_names.copy()
-        st.session_state["select_all"] = True
         try:
             persistence.save_state({
                 "selected_projects": st.session_state.get("selected_projects", []),
-                "select_all": st.session_state.get("select_all", False),
                 "S": st.session_state.get("S", None)
             })
         except Exception:
@@ -107,7 +95,6 @@ with col1:
     try:
         persistence.save_state({
             "selected_projects": st.session_state.get("selected_projects", []),
-            "select_all": st.session_state.get("select_all", False),
             "S": st.session_state.get("S", None)
         })
     except Exception:
@@ -146,7 +133,6 @@ with col1:
         try:
             persistence.save_state({
                 "selected_projects": st.session_state.get("selected_projects", []),
-                "select_all": st.session_state.get("select_all", False),
                 "S": st.session_state.get("S", None)
             })
         except Exception:

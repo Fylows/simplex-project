@@ -12,16 +12,12 @@ try:
     _persisted = persistence.load_state()
     if _persisted:
         # apply persisted values so `st.session_state` reflects latest persisted state
-        for k in ("selected_projects", "select_all", "S"):
+        for k in ("selected_projects", "S"):
             if k in _persisted:
                 st.session_state[k] = _persisted.get(k)
 except Exception:
     # best-effort; don't crash the page if persistence fails
     pass
-
-
-# Load persisted state (best-effort)
-_persisted = persistence.load_state()
 
 # Prefer the in-memory session solution, fall back to persisted file
 solved = st.session_state.get("S")
@@ -29,15 +25,13 @@ if solved is None and _persisted:
     solved = _persisted.get("S")
 
 # Display verbose output (prefer persisted or session `S["Verbose"]`)
-if not solved:
+if not solved or st.session_state["selected_projects"] == []:
     st.info("No computation yet. Please select projects in the Selection page.")
 else:
     if solved == "Unbounded Error":
         st.error("Project is infeasible - no optimal solution exists")
     else:
         st.write("### Verbose Output")
-
-
 
         # If the persisted/session `S` is a dict, try to show its 'Verbose' field
         if isinstance(solved, dict) and "Verbose" in solved:
