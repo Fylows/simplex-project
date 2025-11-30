@@ -45,7 +45,7 @@ st.markdown("Here is a short environmental projects dash board!")
 
 st.download_button(
     label="Download User Manual here!",
-    data=text,
+    data=pdf,
     file_name="Eviroth User Manual.pdf",
     mime="text/plain"
 )
