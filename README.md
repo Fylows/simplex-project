@@ -76,7 +76,7 @@ This problem was modeled and solved using **Linear Programming** via the **Simpl
 **Course:** Numerical and Symbolic Computation  
 **Project Title:** City Pollution Reduction Plan  
 **Method Used:** Simplex Method  
-**Student Numer :** 2024-02076
+**Student Numer :** 2024-*****
 
 ---
 
