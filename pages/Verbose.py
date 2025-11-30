@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import Functions.persistence as persistence
 st.title("Verbose Output")
-
+st.markdown("Details")
 # Load persisted state every time this page is opened so the view reflects
 # the saved values (for example when the user cleared selection in the
 # Selection page and that change was persisted to disk).
