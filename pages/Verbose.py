@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import Functions.persistence as persistence
 st.title("Verbose Output")
-st.markdown("Details")
+st.markdown("In this page you can view all the iterations of the Simplex Algorithm. The Variable Cn represents the count of a specific project, and the variable Sn represents the slack variables.")
 # Load persisted state every time this page is opened so the view reflects
 # the saved values (for example when the user cleared selection in the
 # Selection page and that change was persisted to disk).
@@ -31,7 +31,6 @@ else:
     if solved == "Unbounded Error":
         st.error("Project is infeasible - no optimal solution exists")
     else:
-        st.write("### Verbose Output")
 
         # If the persisted/session `S` is a dict, try to show its 'Verbose' field
         if isinstance(solved, dict) and "Verbose" in solved:

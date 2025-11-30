@@ -41,6 +41,13 @@ st.set_page_config(
 
 # Main title
 st.title("🌱 Environmental Projects Dashboard")
+st.markdown("Here is a short environmental projects dash board!")
+b64 = base64.b64encode(file_contents.encode()).decode()
+
+href = f'<a href="data:text/plain;base64,{b64}" download="myfile.txt">Download here!</a>'
+
+st.markdown(href, unsafe_allow_html=True)
+
 st.markdown("---")
 
 
