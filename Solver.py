@@ -52,7 +52,10 @@ with open("Eviroth User Manual.pdf", "rb") as f:
 b64 = base64.b64encode(pdf_bytes).decode()
 
 # Create hyperlink
-href = f"If you're new check out the user manual "<a href='data:application/pdf;base64,{b64}' download="Eviroth User Manual.pdf">here!</a>"
+href = (
+    f"If you're new check out the user manual "
+    f"<a href='data:application/pdf;base64,{b64}' download='Eviroth User Manual.pdf'>here!</a>"
+)
 
 # Display hyperlink
 st.markdown(href, unsafe_allow_html=True)
