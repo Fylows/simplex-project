@@ -52,7 +52,7 @@ b64 = base64.b64encode(pdf_bytes).decode()
 
 # Create hyperlink
 href = (
-    f"Check out the user manual "
+    f"Welcome to Eviroth! For starters, Check out the user manual "
     f"<a href='data:application/pdf;base64,{b64}' download='Eviroth User Manual.pdf'>here!</a>"
 )
 
