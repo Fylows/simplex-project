@@ -28,7 +28,10 @@ def simplex(tableau, isMax):
         rhs = tableau[:-1, -1]
         valid = denom > 0
         if (not np.any(valid)): # if all values are non positive
-            return "Unbounded Error"
+            return {
+                "Verbose" : verbose,
+                "Unbounded" : 1
+            }
         
         testRatios = np.full(denom.shape, np.inf, dtype=float) # make np.arr thats full of inf thats the same size as denom
         testRatios[valid] = rhs[valid] / denom[valid] # for all valid numbers, do rhs/denom
@@ -55,7 +58,8 @@ def simplex(tableau, isMax):
         "Final tableau": finalTableau,
         "Basic Solution": basicSolution,
         "Z": Z,
-        "Verbose" : verbose
+        "Verbose" : verbose,
+        "Unbounded" : 0
     }
 
 def basicSol(tableau, isMax, nrow, ncol):

@@ -156,7 +156,7 @@ with col1:
         except Exception:
             pass
 
-        if solved == "Unbounded Error":
+        if solved["Unbounded"] == 1:
             st.error("Project is infeasible - no optimal solution exists")
         else:
             with summary_cols[0]:
@@ -184,7 +184,7 @@ with col2:
     # Read solved result from session state to survive reruns/pages
     solved_state = st.session_state.get("S", None)
 
-    if selected_projects and solved_state and solved_state != "Unbounded Error":
+    if selected_projects and solved_state and solved_state["Unbounded"] == 0:
         project_reductions = solved_state["Basic Solution"][0][:10]
         remaining_emissions = [max(0, initial - reduction) for initial, reduction in zip(initial_values, project_reductions)]
     else:
