@@ -43,13 +43,15 @@ st.set_page_config(
 st.title("🌱 Environmental Projects Dashboard")
 st.markdown("Here is a short environmental projects dash board!")
 
+with open("Eviroth User Manual.pdf", "rb") as f:
+    pdf_bytes = f.read()
+
 st.download_button(
     label="Download User Manual here!",
-    data=pdf,
+    data=pdf_bytes,
     file_name="Eviroth User Manual.pdf",
-    mime="text/plain"
+    mime="application/pdf"
 )
-
 st.markdown("---")
 
 
