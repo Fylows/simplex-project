@@ -2,7 +2,6 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import base64
 
 from Functions.projectsTable import ProjectsList
 import Functions.tableauMaker as tableauMaker
@@ -43,11 +42,13 @@ st.set_page_config(
 # Main title
 st.title("🌱 Environmental Projects Dashboard")
 st.markdown("Here is a short environmental projects dash board!")
-b64 = base64.b64encode(file_contents.encode()).decode()
 
-href = f'<a href="data:text/plain;base64,{b64}" download="myfile.txt">Download here!</a>'
-
-st.markdown(href, unsafe_allow_html=True)
+st.download_button(
+    label="Download User Manual here!",
+    data=text,
+    file_name="Eviroth User Manual.pdf",
+    mime="text/plain"
+)
 
 st.markdown("---")
 
