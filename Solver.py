@@ -42,7 +42,6 @@ st.set_page_config(
 
 # Main title
 st.title("🌱 Environmental Projects Dashboard")
-st.markdown("Here is a short environmental projects dash board!")
 
 # Load your PDF (as bytes)
 with open("Eviroth User Manual.pdf", "rb") as f:
