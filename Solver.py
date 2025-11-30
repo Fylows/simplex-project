@@ -35,7 +35,7 @@ POLLUTANT_NAMES = ["CO2", "NO", "SO2", "PM2.5", "CH4", "VOC", "CO", "NH3", "BC",
 
 # Set page configuration
 st.set_page_config(
-    page_title="Environmental Projects Dashboard",
+    page_title="Eviroth",
     page_icon="🌱",
     layout="wide"
 )
@@ -268,18 +268,21 @@ col3, col4 = st.columns(2)
 with col3:
     st.subheader("🎯 Project Categories")
     st.markdown("""
-    - **Renewable Energy**: Solar, Wind, Gas-to-renewables
-    - **Transportation**: EV infrastructure, Bus replacements, Traffic optimization
-    - **Industrial**: Scrubbers, Energy efficiency, Process changes
-    - **Residential**: Insulation, Clean cookstoves, LPG conversion
-    - **Environmental**: Reforestation, Wetlands, Methane capture
+    - **Renewable Energy**: Large solar parks, Small solar installations, Wind farms, Gas-to-renewables conversion, Landfill gas-to-energy
+    - **Transportation**: EV charging infrastructure, Diesel bus replacement, Catalytic converters for buses, Traffic signal/flow upgrades, Rail electrification, Heavy-duty truck retrofits, Port/harbor electrification
+    - **Industrial**: Industrial scrubbers, Boiler retrofits, Industrial energy-efficiency retrofits, Industrial VOC controls, Industrial process changes
+    - **Residential**: Residential insulation/efficiency, Low-emission stove programs, Clean cookstoves & fuel switching, Household LPG conversion
+    - **Environmental / Nature-Based**: Reforestation, Urban tree canopy programs, Wetlands restoration, Biochar for soils
+    - **Methane & Emissions Reduction**: Waste methane capture systems, Agricultural methane reduction, Natural gas leak repairs, Black carbon reduction
+    - **Behavioral / Demand Management**: Behavioral demand-reduction programs
     """)
+
 
 with col4:
     st.subheader("📊 Key Metrics")
     st.markdown("""
     - **Cost**: Implementation cost in thousands of dollars
-    - **CO2**: Carbon dioxide reduction in tons
+    - **CO2**: CO2 reduction in tons
     - **Air Quality**: NO, SO2, PM2.5 reductions
     - **Greenhouse Gases**: CH4, N2O, BC reductions
     - **Other Pollutants**: VOC, CO, NH3 reductions

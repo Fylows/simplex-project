@@ -3,7 +3,15 @@ from Functions import persistence
 import streamlit as st
 import pandas as pd
 import Functions.persistence as persistence
-st.title("Verbose Output")
+
+# Set page configuration
+st.set_page_config(
+    page_title="Eviroth",
+    page_icon="🌱",
+    layout="wide"
+)
+
+st.title("🔢 Verbose Output")
 st.markdown("In this page you can view all the iterations of the Simplex Algorithm. The Variable Cn represents the count of a specific project, and the variable Sn represents the slack variables.")
 # Load persisted state every time this page is opened so the view reflects
 # the saved values (for example when the user cleared selection in the
